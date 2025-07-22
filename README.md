@@ -31,7 +31,7 @@ This project leverages three key concepts:
    npm run dev
    ```
 
-Visit `http://localhost:5173` to start analyzing traces.
+Visit `http://localhost:5000` to start analyzing traces.
 
 ## Environment Variables
 
