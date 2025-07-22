@@ -1,0 +1,172 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(222, 84%, 4.9%);
+  --foreground: hsl(210, 40%, 98%);
+  --muted: hsl(217, 32.6%, 17.5%);
+  --muted-foreground: hsl(215, 20.2%, 65.1%);
+  --popover: hsl(222, 84%, 4.9%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --card: hsl(222, 84%, 4.9%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217, 32.6%, 17.5%);
+  --input: hsl(217, 32.6%, 17.5%);
+  --primary: hsl(142, 71%, 45%);
+  --primary-foreground: hsl(144, 61%, 20%);
+  --secondary: hsl(217, 32.6%, 17.5%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --accent: hsl(217, 32.6%, 17.5%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(142, 71%, 45%);
+  --radius: 0.5rem;
+  --forest-50: hsl(138, 76%, 97%);
+  --forest-100: hsl(140, 84%, 92%);
+  --forest-200: hsl(141, 78%, 85%);
+  --forest-300: hsl(142, 77%, 73%);
+  --forest-400: hsl(142, 69%, 58%);
+  --forest-500: hsl(142, 71%, 45%);
+  --forest-600: hsl(142, 76%, 36%);
+  --forest-700: hsl(142, 72%, 29%);
+  --forest-800: hsl(143, 64%, 24%);
+  --forest-900: hsl(144, 61%, 20%);
+  --earth-50: hsl(33, 100%, 96%);
+  --earth-100: hsl(34, 57%, 92%);
+  --earth-200: hsl(32, 57%, 83%);
+  --earth-300: hsl(31, 60%, 72%);
+  --earth-400: hsl(27, 96%, 61%);
+  --earth-500: hsl(25, 95%, 53%);
+  --earth-600: hsl(21, 90%, 48%);
+  --earth-700: hsl(17, 88%, 40%);
+  --earth-800: hsl(15, 79%, 34%);
+  --earth-900: hsl(15, 75%, 28%);
+}
+
+.dark {
+  --background: hsl(222, 84%, 4.9%);
+  --foreground: hsl(210, 40%, 98%);
+  --muted: hsl(217, 32.6%, 17.5%);
+  --muted-foreground: hsl(215, 20.2%, 65.1%);
+  --popover: hsl(222, 84%, 4.9%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --card: hsl(222, 84%, 4.9%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217, 32.6%, 17.5%);
+  --input: hsl(217, 32.6%, 17.5%);
+  --primary: hsl(142, 71%, 45%);
+  --primary-foreground: hsl(144, 61%, 20%);
+  --secondary: hsl(217, 32.6%, 17.5%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --accent: hsl(217, 32.6%, 17.5%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(142, 71%, 45%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+/* Custom scrollbar */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: hsl(217, 32.6%, 17.5%);
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: hsl(215, 20.2%, 65.1%);
+  border-radius: 2px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: hsl(142, 71%, 45%);
+}
+
+/* Animation delays */
+.animation-delay-150 {
+  animation-delay: 150ms;
+}
+
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2000ms;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4000ms;
+}
+
+/* Glassmorphism effect */
+.backdrop-blur-xs {
+  backdrop-filter: blur(2px);
+}
+
+/* Custom gradients */
+.bg-gradient-radial {
+  background-image: radial-gradient(var(--tw-gradient-stops));
+}
+
+.bg-gradient-conic {
+  background-image: conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops));
+}
+
+/* Enhanced hover effects */
+.hover-lift {
+  transition: transform 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+/* Loading animation */
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Enhanced button focus states */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900;
+}
+
+/* Farm-themed colors */
+.text-forest-400 { color: hsl(142, 69%, 58%); }
+.text-forest-500 { color: hsl(142, 71%, 45%); }
+.text-forest-600 { color: hsl(142, 76%, 36%); }
+.bg-forest-400 { background-color: hsl(142, 69%, 58%); }
+.bg-forest-500 { background-color: hsl(142, 71%, 45%); }
+.bg-forest-600 { background-color: hsl(142, 76%, 36%); }
+.border-forest-500 { border-color: hsl(142, 71%, 45%); }
+
+.text-earth-400 { color: hsl(27, 96%, 61%); }
+.text-earth-500 { color: hsl(25, 95%, 53%); }
+.text-earth-600 { color: hsl(21, 90%, 48%); }
+.bg-earth-400 { background-color: hsl(27, 96%, 61%); }
+.bg-earth-500 { background-color: hsl(25, 95%, 53%); }
+.bg-earth-600 { background-color: hsl(21, 90%, 48%); }
+.border-earth-500 { border-color: hsl(25, 95%, 53%); }
