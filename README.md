@@ -56,6 +56,10 @@ DATABASE_URL="postgresql://username:password@localhost:5432/dbname"
 
 **Note**: Code can be modified sparingly to support different file formats or analysis needs.
 
+## Performance Optimization
+
+For optimal performance and discoverability, the system automatically samples a random subset of 300 traces at each new interaction. This approach balances thorough analysis with response speed, ensuring you get meaningful insights without lengthy wait times.
+
 ## Tech Stack
 
 - React + TypeScript + Vite
@@ -70,6 +74,34 @@ npm run build
 npm start
 ```
 
+## Contributing & Feedback
+
+We welcome contributions, feedback, and forks! Whether you want to:
+
+
+- **Enhance the UI/UX** - Better visualizations or workflow improvements  
+- **Add features** - Any improvements are appreciated
+- **Optimize performance** - Better sampling strategies or caching
+
+Feel free to:
+- 🍴 **Fork the project** and make it your own
+- 📝 **Submit pull requests** with improvements
+- 🐛 **Report issues** or suggest enhancements
+- 💡 **Share ideas** for new features or use cases
+
+Your contributions help make trace analysis more accessible and powerful for everyone!
+
+## Future Roadmap
+
+Here are some exciting ideas to take this project to the next level:
+
+- **Multi-turn conversations** - Enable persistent context across multiple questions for deeper analysis
+- **Traditional filters at tool call level** - Add standard filtering capabilities (date ranges, user types, etc.) alongside AI analysis
+- **Deep drilling queries** - Support longer analytical sessions that can process 100% of data for comprehensive insights (e.g., "show me all examples where users got frustrated with the bot")
+- **Native LangSmith integration** - Built-in support with custom preprocessing steps for seamless workflow integration
+
+These features would transform the tool from a quick analysis helper into a comprehensive trace investigation platform.
+
 ## License
 
-MIT 
+MIT
