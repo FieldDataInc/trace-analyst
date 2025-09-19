@@ -1,7 +1,11 @@
 # Trace Analyst
 
-
 AI-powered trace analysis tool. Upload trace files, ask questions, and get intelligent insights.
+
+## Learn More
+
+- 🐦 **Twitter Thread**: [https://x.com/fpingham/status/1947659171358286170]
+- 🎥 **Demo Video**: [https://www.loom.com/share/7195786e0714452ab017de7e5471ec2c?sid=7433d715-cb64-4120-a506-5dbed9a5fe9a]
 
 ## Soft Clustering with a Reasoning Copilot
 
@@ -97,7 +101,7 @@ Here are some exciting ideas to take this project to the next level:
 
 - **Multi-turn conversations** - Enable persistent context across multiple questions for deeper analysis
 - **Traditional filters at tool call level** - Add standard filtering capabilities (date ranges, user types, etc.) alongside AI analysis
-- **Deep drilling queries** - Support longer analytical sessions that can process 100% of data for comprehensive insights (e.g., "show me all examples where users got frustrated with the bot")
+- **Deep drilling queries** - g longer analytical sessions that can process 100% of data for comprehensive insights (e.g., "show me all examples where users got frustrated with the bot")
 - **Native LangSmith integration** - Built-in support with custom preprocessing steps for seamless workflow integration
 
 These features would transform the tool from a quick analysis helper into a comprehensive trace investigation platform.

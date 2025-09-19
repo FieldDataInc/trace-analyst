@@ -36,7 +36,8 @@ export async function analyzeDatasetGapsStreaming(
   customPrompt?: string,
   chatHistory?: Array<{ id: string; type: 'user' | 'assistant'; content: string; timestamp: number }>,
   abortSignal?: AbortSignal,
-  maxTracesForAnalysis: number = 250 // Renamed and use same count for both analysis and reasoning
+  maxTracesForAnalysis: number = 250, // Renamed and use same count for both analysis and reasoning
+  onResponseReady?: (response: string, selectedTraces: Array<{ trace: string; originalIndex: number }>) => void // Callback when complete response is ready
 ): Promise<{
   response: string;
   examples: string[];
@@ -133,29 +134,34 @@ ${formattedDatasets}
   console.log(`📤 SENDING TO CHAT MODEL: ${selectedTraces.length} traces | Model: ${model}`);
 
   try {
-    const stream = await openai.chat.completions.create({
+    // First, get the complete response (non-streaming)
+    const completeResponse = await openai.chat.completions.create({
       model: model,
       messages: [{ role: "user", content: finalPrompt }],
-      stream: true,
     }, {
       signal: abortSignal
     });
 
-    let fullResponse = '';
+    const fullResponse = completeResponse.choices[0]?.message?.content || '';
+    
+    // Notify that complete response is ready for parallel processing
+    if (onResponseReady) {
+      onResponseReady(fullResponse, selectedTraces);
+    }
 
-    for await (const chunk of stream) {
-      // Check for abort signal
+    // Now stream the response word by word for UI effect
+    const words = fullResponse.split(' ');
+    for (let i = 0; i < words.length; i++) {
       if (abortSignal?.aborted) {
         break;
       }
       
-      const delta = chunk.choices[0]?.delta;
-      if (delta?.content) {
-        fullResponse += delta.content;
-        onChunk(delta.content);
-      }
+      const word = words[i];
+      onChunk(i === 0 ? word : ' ' + word);
+      
+      // Small delay to simulate streaming
+      await new Promise(resolve => setTimeout(resolve, 20));
     }
-
 
     return {
       response: fullResponse,

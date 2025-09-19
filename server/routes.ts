@@ -264,6 +264,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Send initial heartbeat to test connection
       res.write(`data: ${JSON.stringify({ type: 'heartbeat', message: 'Connection established' })}\n\n`);
       if (res.flush) res.flush();
+      
+      // Get complete response first, then start both streaming and trace selection
+      let traceSelectionPromise: Promise<Array<{ trace: string; tags: string[] }>> | null = null;
+      
       const streamingResult = await analyzeDatasetGapsStreaming(
         tracesContent,
         datasets, // Pass all uploaded datasets
@@ -286,16 +290,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
         customPrompt,
         req.body.chatHistory, // Pass the complete chat history
         abortController.signal, // Pass abort signal to OpenAI function
-        maxTracesForReasoning || 250 // Same trace count for both models
+        maxTracesForReasoning || 250, // Same trace count for both models
+        (completeResponse, selectedTraces) => {
+          // Start trace selection immediately when complete response is ready
+          console.log('🚀 Starting trace selection in parallel...');
+          traceSelectionPromise = selectRelevantTraces(
+            tracesContent,
+            query,
+            completeResponse, // Use complete response for accurate trace selection
+            reasoningModel || "o4-mini",
+            customReasoningPrompt,
+            req.body.chatHistory,
+            abortController.signal,
+            selectedTraces
+          );
+          
+          // Send reasoning_start immediately when trace selection starts
+          if (!clientDisconnected && !req.aborted && !res.destroyed) {
+            res.write(`data: ${JSON.stringify({ type: 'reasoning_start' })}\n\n`);
+            if (res.flush) res.flush();
+          }
+        }
       );
 
       res.write(`data: ${JSON.stringify({ type: 'streaming_complete' })}\n\n`);
-      res.write(`data: ${JSON.stringify({ type: 'reasoning_start' })}\n\n`);
-
-      // Only proceed with reasoning if not aborted
-      let tracesWithTags: Array<{ trace: string; tags: string[] }> = [];
-      if (!clientDisconnected && !req.aborted && !res.destroyed) {
-        tracesWithTags = await selectRelevantTraces(
+      
+      // Trace selection should already be running from the callback
+      if (traceSelectionPromise) {
+        console.log('⏳ Trace selection already running, waiting for completion...');
+        const tracesWithTags = await traceSelectionPromise;
+        
+        res.write(`data: ${JSON.stringify({ 
+          type: 'complete', 
+          tracesWithTags: tracesWithTags 
+        })}\n\n`);
+      } else {
+        // Fallback: start trace selection now (shouldn't happen with the callback)
+        console.log('⚠️ Fallback: Starting trace selection now...');
+        res.write(`data: ${JSON.stringify({ type: 'reasoning_start' })}\n\n`);
+        
+        const tracesWithTags = await selectRelevantTraces(
           tracesContent,
           query,
           streamingResult.response,
@@ -303,13 +337,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
           customReasoningPrompt,
           req.body.chatHistory,
           abortController.signal,
-          streamingResult.selectedTraces // Pass the same traces used in analysis
+          streamingResult.selectedTraces
         );
+        
+        res.write(`data: ${JSON.stringify({ 
+          type: 'complete', 
+          tracesWithTags: tracesWithTags 
+        })}\n\n`);
       }
-      res.write(`data: ${JSON.stringify({ 
-        type: 'complete', 
-        tracesWithTags: tracesWithTags 
-      })}\n\n`);
 
       res.end();
 
